@@ -102,7 +102,7 @@ exports[`App.vue it has the correct pristine / empty state 1`] = `
        
       <resultstab-stub
         code=""
-        copy-link-text="copy to clipboard"
+        copy-link-text="复制事件脚本"
         restart="function () { [native code] }"
         set-copying="function () { [native code] }"
         style="display: none;"
@@ -123,7 +123,7 @@ exports[`App.vue it has the correct pristine / empty state 1`] = `
           href="#"
           style="display: none;"
         >
-          copy to clipboard
+          复制事件脚本
         </a>
       </div>
     </div>

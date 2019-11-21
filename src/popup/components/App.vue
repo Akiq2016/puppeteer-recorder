@@ -32,7 +32,7 @@
         <ResultsTab :code="code" :copy-link-text="copyLinkText" :restart="restart" :set-copying="setCopying" v-show="showResultsTab"/>
         <div class="results-footer" v-show="showResultsTab">
           <button class="btn btn-sm btn-primary" @click="restart" v-show="code">Restart</button>
-          <a href="#" v-clipboard:copy='code' @click="setCopying" v-show="code">{{copyLinkText}}</a>
+          <a href="#" v-clipboard:copy='transformRecordScript(code)' @click="setCopying" v-show="code">{{copyLinkText}}</a>
         </div>
       </div>
       <HelpTab v-show="showHelp"></HelpTab>
@@ -123,7 +123,8 @@ export default {
           const codeOptions = options ? options.code : {}
 
           const codeGen = new CodeGenerator(codeOptions)
-          this.code = codeGen.generate(this.recording)
+          // this.code = codeGen.generate(this.recording)
+          this.code = codeGen.generateEvents(this.recording)
           this.showResultsTab = true
           this.storeState()
         })
@@ -193,6 +194,19 @@ export default {
         if (this.options && this.options.extension && this.options.extension.telemetry) {
           if (window._gaq) window._gaq.push(['_trackPageview'])
         }
+      },
+      /**
+       * 二次处理录制生成的脚本
+       * @param {Function} fn 传入录制的脚本
+       */
+      transformRecordScript(fn) {
+        // 转换成字符串后 处理方法
+        let _fn = fn.toString();
+
+        // 1. 有的选择器的 id 中含有 "\.", 应当转译成 "\\." 才能正常识别到。
+        _fn = _fn.replace(/(?<!\\)(\\\.)/g, "\\$1");
+
+        return _fn;
       }
     },
     computed: {
@@ -206,7 +220,7 @@ export default {
         return this.isPaused ? 'Resume' : 'Pause'
       },
       copyLinkText () {
-        return this.isCopying ? 'copied!' : 'copy to clipboard'
+        return this.isCopying ? '成功!' : '复制事件脚本'
       }
     }
 }

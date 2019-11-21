@@ -41,6 +41,10 @@ export default class CodeGenerator {
     return importPuppeteer + this._getHeader() + this._parseEvents(events) + this._getFooter()
   }
 
+  generateEvents (events) {
+    return this._parseEvents(events)
+  }
+
   _getHeader () {
     console.debug(this._options)
     let hdr = this._options.wrapAsync ? wrappedHeader : header
